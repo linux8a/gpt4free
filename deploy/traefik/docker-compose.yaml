@@ -22,6 +22,8 @@ services:
       - "traefik.http.routers.gpt4free${env}.tls.domains[0].main=${fqdns}"
       - "traefik.http.services.gpt4free${env}_service.loadbalancer.server.port=8501"
       - "traefik.docker.network=outside-network"
+      # Use for automatic update docker imagen use watchtower 
+      - "com.centurylinklabs.watchtower.enable=true"
 networks: 
   outside-network:
     external: true
