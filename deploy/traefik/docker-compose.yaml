@@ -1,0 +1,27 @@
+version: "3.9"
+
+services:
+  gpt4free:
+    ### Uncoment below if build in local
+    # build:
+    #   context: ./././
+    #   dockerfile: Dockerfile
+    container_name: gpt4free${env}
+    # environment:
+    # - http_proxy=http://127.0.0.1:1080 # modify this for your proxy
+    # - https_proxy=http://127.0.0.1:1080 # modify this for your proxy
+    image: linux8a/gpt4free
+    restart: always
+    networks:
+      - outside-network
+    labels:
+      - "traefik.enable=true"
+      - "traefik.http.routers.gpt4free${env}.entrypoints=websecure"
+      - "traefik.http.routers.gpt4free${env}.rule=Host(`${fqdns}`)"
+      - "traefik.http.routers.gpt4free${env}.tls.certresolver=lets-encr"
+      - "traefik.http.routers.gpt4free${env}.tls.domains[0].main=${fqdns}"
+      - "traefik.http.services.gpt4free${env}_service.loadbalancer.server.port=8501"
+      - "traefik.docker.network=outside-network"
+networks: 
+  outside-network:
+    external: true
